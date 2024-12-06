@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service VideoProcessingService {
+    rpc StreamFrames (stream FrameRequest) returns (stream FrameResponse);
+}
+
+message FrameRequest {
+    bytes frame_data = 1;  // 프레임 데이터 (바이트 스트림)
+    string client_id = 2;  // 클라이언트 ID
+}
+
+message FrameResponse {
+    bytes frame_data = 1;  // 합성된 프레임 데이터 (바이트 스트림)
+}
