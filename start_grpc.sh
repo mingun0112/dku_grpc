@@ -6,13 +6,11 @@ sudo apt update -y
 echo "Installing Python and pip..."
 sudo apt install python3 python3-pip -y
 
-cd ./dku_grpc
-
 python3 -m grpc_tools.protoc -I./proto --python_out=. --grpc_python_out=. ./proto/video_concat.proto
 
 pip3 install -r requirements.txt
 
-tmux new-session -d -s mysession
+tmux new-session -d -s dku_grpc
 
 echo "Starting server..."
 tmux send-keys "python3 server.py" C-m
@@ -52,4 +50,4 @@ echo "Starting client4..."
 tmux send-keys "python3 client.py client4 ./video/4.mp4" C-m
 sleep 2
 
-tmux attach -t mysession
+tmux attach -t dku_grpc

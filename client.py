@@ -11,8 +11,6 @@ def stream_video(client_id, video_path):
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = video_concat_pb2_grpc.VideoProcessingServiceStub(channel)
         cap = cv2.VideoCapture(video_path)
-
-        # 클라이언트 폴더가 없으면 생성
         if not os.path.exists(client_id):
             os.makedirs(client_id)
 
@@ -29,13 +27,11 @@ def stream_video(client_id, video_path):
 
         response_iterator = stub.StreamFrames(frame_generator())
         for idx, response in enumerate(response_iterator):
-            # 수신한 합성 프레임 디코딩
+
             print(f"Received result {idx + 1}")
             concat_frame = np.frombuffer(response.frame_data, dtype=np.uint8)
             frame = cv2.imdecode(concat_frame, cv2.IMREAD_COLOR)
 
-            # 결과를 폴더에 프레임 번호와 타임스탬프를 포함한 파일명으로 저장
-            # timestamp = time.strftime("%Y%m%d_%H%M%S")
             filename = f"{client_id}/client_{client_id}_frame_{idx + 1}.jpg"
             cv2.imwrite(filename, frame)
 
@@ -49,8 +45,6 @@ def parse_arguments():
     return parser.parse_args()
 
 if __name__ == "__main__":
-    # 명령행 인자 파싱
-    args = parse_arguments()
 
-    # 클라이언트 ID와 비디오 경로를 인자로 받아서 실행
+    args = parse_arguments()
     stream_video(args.client_id, args.video_path)
