@@ -5,7 +5,7 @@ sudo apt update -y
 
 echo "Installing Python and pip..."
 sudo apt install python3 python3-pip -y
-
+sudo apt install tmux
 python3 -m grpc_tools.protoc -I./proto --python_out=. --grpc_python_out=. ./proto/video_concat.proto
 
 pip3 install -r requirements.txt
